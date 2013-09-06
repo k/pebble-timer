@@ -120,6 +120,7 @@ void select_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
         timer_tick_handle = app_timer_send_event(context, 1000, 0);
         timerStarted = YES;
     } else if (timerStarted) {
+        layer_set_hidden(&inverter_layer.layer, false);
         app_timer_cancel_event(context, timer_handle);
         strcpy(text_buffer, zeros);
         text_layer_set_text(&textLayer, text_buffer);
@@ -195,8 +196,10 @@ void handle_timer(AppContextRef ctx, AppTimerHandle handle, uint32_t cookie) {
         timerStarted = NO;
 
     } else if (cookie == COOKIE_END_TIMER) {
-        text_layer_set_text(&textLayer, zeros);
+        strcpy(text_buffer, zeros);
+        text_layer_set_text(&textLayer, text_buffer);
         current = 0;
+        layer_set_hidden(&inverter_layer.layer, false);
         highlight_digit(current);
     } else {
         decrement_timer(text_buffer);
